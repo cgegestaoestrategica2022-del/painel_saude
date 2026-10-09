@@ -354,22 +354,10 @@ v_geral, aba_tconsulta, aba_medicos, consultas_distrito = st.tabs([
 ##===================================================
 with v_geral:
 
-    st.markdown(
-    """
-    <div style="
-        
-        padding: 16px; 
-        border-radius: 8px; 
-        border-left: 4px solid #38BDF8;
-        color: #38BDF8;
-        font-family: sans-serif;
-    ">
-        Os indicadores apresentados referem-se aos dados disponíveis para 2026.
-    </div>
-    """,
-    unsafe_allow_html=True
+    
+    st.info(
+    "Os indicadores apresentados referem-se aos dados disponíveis para 2026."
 )
-
     st.subheader("Visão Geral")
     col1, col2, col3 = st.columns(3)
 
