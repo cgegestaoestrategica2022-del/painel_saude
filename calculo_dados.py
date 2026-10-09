@@ -1,16 +1,57 @@
 import pandas as pd
 import streamlit as st
 
+
 @st.cache_data
 def carregar_dados():
-    
 
     try:
-        df = pd.read_csv('e-sus.csv')
-        cnes = pd.read_excel("Dados Brutos.xlsx", header=2)
+
+        colunas_esus = [
+            "data_mes",
+            "co_seq_fat_atd_ind",
+            "cidadao_cns",
+            "equipe_ine",
+            "cbo_codigo",
+            "co_dim_tipo_atendimento",
+            "us_distrito"
+        ]
+
+        df = pd.read_csv(
+            "e-sus.csv",
+            usecols=colunas_esus,
+            dtype={
+                "co_seq_fat_atd_ind": "string",
+                "cidadao_cns": "string",
+                "equipe_ine": "string",
+                "cbo_codigo": "string",
+                "co_dim_tipo_atendimento": "string",
+                "us_distrito": "string"
+            }
+        )
+
+
+        cnes = pd.read_excel(
+            "Dados Brutos.xlsx",
+            header=2,
+            usecols=[
+                "Data de Entrada",
+                "CNS do Profissional"
+            ],
+            dtype={
+                "CNS do Profissional": "string"
+            }
+        )
+
+
     except FileNotFoundError:
-        st.error("Ficheiro 'e-sus.csv' não encontrado.")
+
+        st.error("Uma das bases não foi encontrada.")
+
         return None
+
+
+    
 
     # Ajuste dos meses
     if '-' in str(df['data_mes'].iloc[0]) or '/' in str(df['data_mes'].iloc[0]):
@@ -30,10 +71,11 @@ def carregar_dados():
     df["Mes_nome"] = pd.Categorical(df["Mes_nome"], categories=meses.values(), ordered=True)
 
     atendimentos_mes = (
-        df.groupby("Mes_nome", observed=False)["co_seq_fat_atd_ind"]
-        .nunique()
-        .reset_index(name="total_atendimentos")
-    )
+    df
+    .groupby("Mes_nome", observed=True)["co_seq_fat_atd_ind"]
+    .nunique()
+    .reset_index(name="total_atendimentos")
+)
 
     # Contagem geral usando APENAS o CNS
     total_usuarios_geral = df["cidadao_cns"].nunique()
@@ -43,7 +85,7 @@ def carregar_dados():
     df_medicos = df[
     (df["cbo_codigo"].astype(str).str.strip() == "225142")
     &
-    (df["co_dim_tipo_atendimento"] != 5)
+    (df["co_dim_tipo_atendimento"] != '5')
 ].copy()
 
     total_atendimentos_medicos = df_medicos["co_seq_fat_atd_ind"].nunique()
@@ -53,9 +95,10 @@ def carregar_dados():
 
     medicos_mes = (
     df_medicos
-    .groupby("Mes_nome", observed=False)["co_seq_fat_atd_ind"]
+    .groupby("Mes_nome", observed=True)["co_seq_fat_atd_ind"]
     .nunique()
-    .reset_index(name="total_consultas"))
+    .reset_index(name="total_consultas")
+)
 
     df["us_distrito"] = (
     df["us_distrito"]

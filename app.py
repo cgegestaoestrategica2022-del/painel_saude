@@ -1,5 +1,5 @@
 import streamlit as st
-import calculo_dados as cd
+import carregar_dados_publicos as cd
 import pandas as pd
 
 def aplicar_tema(tema):
@@ -216,9 +216,6 @@ tema = st.radio(
 )
 
 aplicar_tema(tema)
-
-
-
 
 #===================================================
 #SENHA -> EU CONFIGURO ELA EM UM ARQUIVO SEPARADO
