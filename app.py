@@ -41,6 +41,10 @@ def aplicar_tema(tema):
             background-color: {fundo} !important;
         }}
 
+        .block-container {{
+            background-color: {fundo} !important;
+        }}
+
 
         /* ========================================
            TEXTOS
@@ -70,12 +74,10 @@ def aplicar_tema(tema):
             -webkit-text-fill-color: {texto} !important;
         }}
 
-        /* Placeholder */
         [data-testid="stTextInput"] input::placeholder {{
             color: {texto_secundario} !important;
         }}
 
-        /* Ícone do olho da senha */
         [data-testid="stTextInput"] svg {{
             color: {texto} !important;
             fill: {texto} !important;
@@ -198,6 +200,87 @@ def aplicar_tema(tema):
         }}
 
 
+        /* ========================================
+           RESPONSIVIDADE PARA CELULAR
+        ======================================== */
+
+        @media (max-width: 768px) {{
+
+            /* Reduz margens */
+            .block-container {{
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+                padding-top: 1rem !important;
+                max-width: 100% !important;
+            }}
+
+            /* Colunas uma embaixo da outra */
+            [data-testid="stHorizontalBlock"] {{
+                flex-direction: column !important;
+                gap: 0.75rem !important;
+            }}
+
+            [data-testid="column"] {{
+                width: 100% !important;
+                flex: 1 1 100% !important;
+                min-width: 100% !important;
+            }}
+
+            /* Métricas ocupam toda a tela */
+            [data-testid="stMetric"] {{
+                width: 100% !important;
+                min-width: 100% !important;
+            }}
+
+            /* Abas com rolagem horizontal */
+            .stTabs [data-baseweb="tab-list"] {{
+                overflow-x: auto !important;
+                flex-wrap: nowrap !important;
+                scrollbar-width: thin;
+            }}
+
+            .stTabs [data-baseweb="tab"] {{
+                min-width: max-content !important;
+                flex-shrink: 0 !important;
+            }}
+
+            /* Títulos menores */
+            h1 {{
+                font-size: 1.8rem !important;
+            }}
+
+            h2 {{
+                font-size: 1.4rem !important;
+            }}
+
+            h3 {{
+                font-size: 1.2rem !important;
+            }}
+
+            /* Texto das métricas */
+            [data-testid="stMetricValue"] {{
+                font-size: 1.6rem !important;
+            }}
+
+            [data-testid="stMetricLabel"] {{
+                font-size: 0.9rem !important;
+            }}
+
+            /* Gráficos ocupando toda a largura */
+            [data-testid="stVegaLiteChart"] {{
+                width: 100% !important;
+            }}
+
+            /* Inputs ocupando toda a largura */
+            [data-testid="stTextInput"] {{
+                width: 100% !important;
+            }}
+
+            [data-testid="stSelectbox"] {{
+                width: 100% !important;
+            }}
+        }}
+
         </style>
         """,
         unsafe_allow_html=True
@@ -258,22 +341,6 @@ st.caption(
 )
 # Criando as abas
 
-st.markdown(
-    """
-    <style>
-    /* Muda a cor da linha brilhante embaixo da aba ativa */
-    .stTabs [data-baseweb="tab-highlight"] {
-        background-color: #38BDF8 !important;
-    }
-    
-    /* Muda a cor do texto da aba selecionada */
-    .stTabs [aria-selected="true"] p {
-        color: #38BDF8 !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 v_geral, aba_tconsulta, aba_medicos, consultas_distrito = st.tabs([
     "Visão Geral",
     "Atendimentos",
@@ -290,7 +357,7 @@ with v_geral:
     st.markdown(
     """
     <div style="
-        background-color: #1E293B; 
+        
         padding: 16px; 
         border-radius: 8px; 
         border-left: 4px solid #38BDF8;
